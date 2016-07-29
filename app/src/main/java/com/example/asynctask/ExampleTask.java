@@ -2,13 +2,21 @@ package com.example.asynctask;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 /**
  * Created by admin on 7/29/2016.
  */
-public class ExampleTask extends AsyncTask<Void,Void, Void> {
+public class ExampleTask extends AsyncTask<Void, Integer, Void> {
 
     private static final String TAG = "ExampleTaskTAG_";
+
+    private ProgressBar progressBar;
+
+    public ExampleTask(ProgressBar progressBar){
+
+        this.progressBar = progressBar;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -21,12 +29,14 @@ public class ExampleTask extends AsyncTask<Void,Void, Void> {
     protected Void doInBackground(Void... voids) {
 
         Log.d(TAG, "doInBackground: " + Thread.currentThread());
-        publishProgress();
+
+
 
         for (int i = 0; i < 100; i++) {
             try {
                 Thread.sleep(1000);
-                Log.d(TAG, "onCreate: " + i);
+                Log.d(TAG, "doInBackground: " + i);
+                publishProgress(i);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -42,10 +52,11 @@ public class ExampleTask extends AsyncTask<Void,Void, Void> {
     }
 
     @Override
-    protected void onProgressUpdate(Void... values) {
+    protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
 
         Log.d(TAG, "onProgressUpdate: " + Thread.currentThread());
+        progressBar.setProgress(values[0]);
     }
 
     @Override
